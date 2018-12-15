@@ -1,6 +1,8 @@
 var express = require('express'),
     app = express(),
-    http = require('http').Server(app);
+    http = require('http').Server(app),
+    socketClient = require('socket.io-client')('http://localhost:5000');
+
 let port = 5000;
 const io = require('socket.io')(http);
 
@@ -10,17 +12,23 @@ let clients = [];
 app.use(express.static('public'));
 
 
+socketClient.on('connect', function () {
+    console.log("API CLIENT: connected...");
+});
+
+
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/message', function (req, res) {
     console.log("POST: message");
-    socketClient.on('message', {
-        message: 'MSG: from console client...'
+    socketClient.emit('message', {
+        message: 'MSG: from API client...'
     });
     res.end();
 });
+
 
 
 http.listen(port, function () {
@@ -36,7 +44,7 @@ io.on('connection', function (socket) {
     // Send a message to client -> Default 'message' event
     socket.send("Welcome to the Socket Server...");
 
-    socket.on("data", (data) => {
+    socket.on("message", (data) => {
         console.log("Client says : ", data);
         io.sockets.emit('message', data);
     })

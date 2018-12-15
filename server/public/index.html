@@ -21,11 +21,15 @@
         let socket = io(); // localhost:5000  (connect to default namespace)
 
         $("#btnMessage").on("click", (e) => {
-            socket.emit("data", `Hello from ${socket.id}`);
+            socket.emit("message", `Hello from ${socket.id}`);
         });
 
         socket.on("on-new-client-connected", function (data) {
             alert(data);
+            $("#message").html(`<h3>${data.message}</h3>`);
+        });
+
+        socket.on("message", function (data) {
             $("#message").html(`<h3>${data.message}</h3>`);
         });
 
