@@ -1,8 +1,6 @@
 var express = require('express'),
     app = express(),
-    http = require('http').Server(app),
-    socketClient = require('socket.io-client')('http://localhost:5000');
-
+    http = require('http').Server(app);
 let port = 5000;
 const io = require('socket.io')(http);
 
@@ -10,11 +8,6 @@ const io = require('socket.io')(http);
 let clients = [];
 
 app.use(express.static('public'));
-
-
-socketClient.on('connect', function () {
-    console.log("CONSOLE CLIENT: connected...");
-});
 
 
 app.get('/', function (req, res) {
@@ -28,7 +21,6 @@ app.post('/message', function (req, res) {
     });
     res.end();
 });
-
 
 
 http.listen(port, function () {
