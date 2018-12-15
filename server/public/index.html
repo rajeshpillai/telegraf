@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="styles/site.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div>
+        <h1>Hello, Socket!</h1>
+        <div id="message">
+
+        </div>
+        <button id="btnMessage">Send Message</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <script>
+        let socket = io(); // localhost:5000  (connect to default namespace)
+
+        $("#btnMessage").on("click", (e) => {
+            socket.emit("data", `Hello from ${socket.id}`);
+        });
+
+        socket.on("on-new-client-connected", function (data) {
+            alert(data);
+            $("#message").html(`<h3>${data.message}</h3>`);
+        });
+
+        socket.on("on-client-disconnected", function (data) {
+            $("#message").html(`<h3>${data.message}</h3>`);
+        });
+    </script>
+</body>
+
+</html>
