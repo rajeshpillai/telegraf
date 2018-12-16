@@ -21,7 +21,7 @@
         let socket = io(); // localhost:5000  (connect to default namespace)
 
         $("#btnMessage").on("click", (e) => {
-            socket.emit("message", `Hello from ${socket.id}`);
+            socket.emit("message", { message: `Hello from ${socket.id}` });
         });
 
         socket.on("on-new-client-connected", function (data) {
